@@ -1,62 +1,47 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_adoption/constant.dart';
 import 'package:pet_adoption/models/pet_model.dart';
 
+class AdoptPetScreen extends StatefulWidget {
+  final Pet pet;
 
-
-
-
-class HomeScreen2 extends StatelessWidget {
-  const HomeScreen2({Key? key}) : super(key: key);
+   AdoptPetScreen({required this.pet});
 
   @override
-  Widget build(BuildContext context) {
-    return  MaterialApp(
-      home: HomeScreen(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  _AdoptPetScreenState createState() => _AdoptPetScreenState();
 }
 
-class HomeScreen extends StatefulWidget {
-  // const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  Widget buildPetCategory(bool isSelected, String category) {
-    return GestureDetector(
-      onTap: () {
-        debugPrint("Selected $category");
-      },
-      child: Container(
-        margin: EdgeInsets.all(10.0),
-        width: 80.0,
-        decoration: BoxDecoration(
-          color:
-              isSelected ? Theme.of(context).primaryColor : Color(0xfff8f2f7),
-          borderRadius: BorderRadius.circular(30.0),
-          border: isSelected
-              ? Border.all(
-                  width: 8.0,
-                  color: Color(0xfffed803),
-                )
-              : null,
-        ),
-        child: Center(
-          child: Text(
-            category,
+class _AdoptPetScreenState extends State<AdoptPetScreen> {
+  Widget _buildInfoCard(String label, String info) {
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      width: 100.0,
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8F2F7),
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            label,
             style: TextStyle(
               fontFamily: 'Montserrat',
-              fontSize: 14.0,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          const SizedBox(height: 8.0),
+          Text(
+            info,
+            style: const TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 16.0,
               fontWeight: FontWeight.w600,
               color: Colors.black,
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -64,110 +49,189 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: ListView(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.only(left: 40, top: 40),
-            alignment: Alignment.centerLeft,
-            child: CircleAvatar(
-              child: ClipOval(
-                child: Image(
-                  height: 40.0,
-                  width: 40.0,
-                  image: AssetImage('assets/images/owner.JPG'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.0),
-            child: TextField(
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 22.0,
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                prefixIcon: Padding(
-                  padding: EdgeInsets.only(right: 30.0),
-                  child: Icon(
-                    Icons.add_location,
-                    color: Colors.black,
-                    size: 40.0,
-                  ),
-                ),
-                labelText: 'Location',
-                labelStyle: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.grey,
-                ),
-                contentPadding: EdgeInsets.only(bottom: 20.0),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 50.0,
-          ),
-          Container(
-            height: 100.0,
-            color: Colors.grey,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                SizedBox(width: 40.0),
-                Padding(
-                  padding: EdgeInsets.only(right: 20.0),
-                  child: IconButton(
-                    onPressed: () {
-                      print('Filters');
-                    },
-                    icon: Icon(
-                      Icons.search,
-                      size: 35.0,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Hero(
+                  tag: widget.pet.id,
+                  child: Container(
+                    width: double.infinity,
+                    height: 350.0,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          widget.pet.imageUrl,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-                buildPetCategory(false, "Cats"),
-                buildPetCategory(true, "Dogs"),
-                buildPetCategory(false, "Birds"),
-                buildPetCategory(false, "Rabbits"),
-                buildPetCategory(false, "Others"),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0, left: 10.0),
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_back_ios),
+                    color: Colors.white,
+                  ),
+                )
               ],
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 40.0, bottom: 30.0),
-            child: Column(
-              children: [
-                // Hero(
-                //   tag: pets[0].id,
-                //   child: Container(
-                //     width: double.infinity,
-                //     height: 250.0,
-                //     decoration: BoxDecoration(
-                //         color: Colors.red,
-                //         borderRadius: BorderRadius.only(
-                //           topLeft: Radius.circular(20.0),
-                //           bottomLeft: Radius.circular(20.0),
-                //         ),
-                //         image: DecorationImage(
-                //           image: AssetImage('assets/images/img_2.png'),
-                //         )),
-                //   ),
-                // ),
-              ],
+            const SizedBox(height: 20.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    widget.pet.name,
+                    style: const TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.favorite_border),
+                    iconSize: 30.0,
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () => print('Favorite ${widget.pet.name}'),
+                  ),
+                ],
+              ),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              child: Text(
+                widget.pet.description,
+                style: const TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 16.0,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 30.0),
+              height: 120.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  const SizedBox(width: 30.0),
+                  _buildInfoCard('Age', widget.pet.age.toString()),
+                  _buildInfoCard('Sex', widget.pet.sex),
+                  _buildInfoCard('Color', widget.pet.color),
+                  _buildInfoCard('ID', widget.pet.id.toString()),
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 20.0, top: 30.0),
+              width: double.infinity,
+              height: 90.0,
+              decoration: const BoxDecoration(
+                color: Color(0xFFFFF2D0),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  bottomLeft: Radius.circular(20.0),
+                ),
+              ),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 8.0,
+                ),
+                leading: CircleAvatar(
+                  child: ClipOval(
+                    child: Image(
+                      height: 40.0,
+                      width: 40.0,
+                      image: AssetImage(owner.imageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                title: Text(
+                  owner.name,
+                  style: const TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  'Owner',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+                trailing: Text(
+                  '1.68 km',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 25.0),
+              child: Text(
+                owner.bio,
+                style: const TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 15.0,
+                  height: 1.5,
+                ),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  SizedBox(
+                    height: 50.0,
+                    width: 60.0,
+                    child: IconButton(
+                      onPressed: () => print('Share'),
+                      icon: const Icon(Icons.share),
+                    ),
+                  ),
+                  FlatButton.icon(
+                    padding: const EdgeInsets.all(
+                      20.0,
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () => print('Adopt'),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    icon: const Icon(
+                      Icons.pets,
+                      color: Colors.white,
+                    ),
+                    label: const Text(
+                      'ADOPTION',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-double lastStop = 02.14;
